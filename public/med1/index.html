@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script src="p5.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!-- <script src="p5.sound.min.js"></script> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.1.3/socket.io.js"
+        integrity="sha512-2RDFHqfLZW8IhPRvQYmK9bTLfj/hddxGXQAred2wNZGkrKQkLGj8RCkXfRJPHlDerdHHIzTFaahq4s/P4V6Qig=="
+        crossorigin="anonymous"></script>
+    <script language="javascript" type="text/javascript" src="p5.serialport.js"></script>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <meta charset="utf-8">
+    <title>Interactive Pulse</title>
+
+
+</head>
+
+<body>
+    <a id="back" style="cursor:crosshair; color: white;" href="../index.html">BACK</a>
+
+    <div class="description">
+
+    </div>
+    <div id='holder'>
+        <div id='quote'></div>
+        <center>
+            <button style="border:none; outline:none; cursor:crosshair;" id='next'>meditate</button>
+        </center>
+        <div id="player" class="box">
+
+            <!-- <audio class="audio" controls="controls"> -->
+            <audio class="audio" autoplay>
+                <source type="audio/mpeg" src="http://stream.zeno.fm/xk9bwpgk1k0uv">
+            </audio>
+        </div>
+
+
+    </div>
+    <script src="sketch.js"></script>
+
+
+    <script>
+        $(document).ready(function () {
+            var arr = ["Input your personal port number and strap the pulse sensor on to connect through meditation with others", "Once you’re settled, tune into your pulse. Notice your breath, without trying to change it. And notice also if you feel tense or relaxed, without trying to change that either.", "Inhale through your nose and then exhale through your mouth. Continue to take deep, full breaths in through your nose and out through your mouth. As you breathe, become aware of the state of your body and the quality of your mind.", "Where is your body holding tension? Do you feel closed off or shut down emotionally? Where is your mind? Is it wandering or is it at home within the breath? Is your mind at ease or filled with restlessness, negativity, and doubt?", "Place both hands over your heart and continue to inhale through your nose and exhale through your mouth. Ask yourself: How does it feel to place my hands over this tender area, this place where I experience love for self and others?", "Let your breath become more smooth and effortless and begin to breathe in and out through your nose. Feel the flow of air moving into your lungs and then back out into the world.", "With each exhale, imagine you are releasing any negative thoughts that may be lingering in your mind.", "With each exhale, imagine you are releasing any negative thoughts that may be lingering in your mind.", "Continue to focus on your breath. On each inhale, think “I am worthy,” and on each exhale, “I am enough.” Let each inhale draw in self-love and each exhale release what is no longer serving you. Take a few minutes to breathe and recite this mantra internally. Notice how you feel as you say these words to yourself.", "Imagine now that you could breathe into your heart and visualize love pouring out of your hands and into your heart.", "Let this love warm and permeate you from your heart center, filling the rest of your body.", "Feel a sense of comfort and calm traveling up through your chest into your neck and head, out into your shoulders, arms, and hands, and then down into your ribs, belly, pelvis, legs, and feet", "Allow a sensation of warmth to fill you from head to toe. Breathe here and know that love is always available for you when you need it.", "Author Samantha Feller"];
+            var index = 0;
+            $('#next').click(function () {
+                $('#quote').html(arr[index]);
+                index = (index + 1) % arr.length;
+            });
+        });
+    </script>
+</body>
+
+</html>

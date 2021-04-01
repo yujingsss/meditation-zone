@@ -1,0 +1,80 @@
+<html>
+
+<head>
+  <link rel="stylesheet" href="style.css">
+  <script src="libraries/p5.min.js"></script>
+  <script src="libraries/p5.sound.min.js"></script>
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Lato:wght@900&display=swap" rel="stylesheet">
+  <!-- socket cdn -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.1.3/socket.io.js"
+    integrity="sha512-2RDFHqfLZW8IhPRvQYmK9bTLfj/hddxGXQAred2wNZGkrKQkLGj8RCkXfRJPHlDerdHHIzTFaahq4s/P4V6Qig=="
+    crossorigin="anonymous"></script>
+
+  <title> meditation zone </title>
+</head>
+
+<body>
+  <script src="sketch.js"></script>
+  <div>
+    <!-- <h1 id="h1" style="cursor:crosshair" onclick="sket()">MEDITATION ZONE</h1> -->
+    <h1 id="h1" style="cursor:crosshair">MEDITATION ZONE</h1>
+    <center>
+      <!-- <h2 id="h2" style="cursor:crosshair" onclick="inf()">more information</h2> -->
+      <h2 id="h2" style="cursor:crosshair">more information</h2>
+      <br>
+    </center>
+  </div>
+  <div id="info">
+    <p>This is a project made by Malath Kamaluldeen, Daniel Narvaez, Aldora Wang, Yujing Shi, and Taylor Paydos. It is a
+      health and wellness tool meant to provide an escape from digital anxiety and welcome digital care. We’ve created a
+      series of interactive guided meditations that use heart rate to get in tune with the connection between the mind
+      and body. Credit to Brian Eno for ambient music. Enjoy</p>
+  </div>
+  <div id="sketches">
+    <div id="ske1">
+      <a style="cursor:crosshair" href="med1/index.html">self love meditation</a>
+    </div>
+    <div id="ske2">
+      <a style="cursor:crosshair" href="med2/index.html">body meditation</a>
+    </div>
+    <div id="ske3">
+      <a style="cursor:crosshair" href="med3/index.html">stress relieving meditation</a>
+    </div>
+    <div id="ske4">
+      <a style="cursor:crosshair" href="med4/index.html">peaceful meditation</a>
+    </div>
+  </div>
+
+  <script src="sketch.js"></script>
+
+  <script>
+    // function inf() {
+    //   var x = document.getElementById("info");
+    //   if (x.style.display === "block") {
+    //     x.style.display = "none";
+    //   } else {
+    //     x.style.display = "block";
+    //   }
+    // }
+    // function sket() {style="border:none; outline:none; cursor:crosshair;"
+    //   var x = document.getElementById("sketches");
+    //   if (x.style.display === "block") {
+    //     x.style.display = "none";
+    //   } else {
+    //     x.style.display = "block";
+    //   }
+    // }
+
+    document.getElementById('h1').addEventListener('click', (event) => {
+      document.getElementById('info').style.display = 'none';
+      document.getElementById('sketches').style.display = 'block';
+    });
+    document.getElementById('h2').addEventListener('click', (event) => {
+      document.getElementById('sketches').style.display = 'none';
+      document.getElementById('info').style.display = 'block';
+    });
+  </script>
+</body>
+
+</html>
