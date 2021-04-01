@@ -66,7 +66,7 @@ function setup() {
   inputSerialPort = createInput('');
   inputSerialPort.position(width/2 - 170, 75);
   inputSerialPort.size(300);
-  inputSerialPort.value('/dev/cu.usbmodem14101');
+  inputSerialPort.value('/dev/tty.usbmodem14601');
   button = createButton('start');
   button.size(40);
   button.position(inputSerialPort.x + inputSerialPort.width, 75);
@@ -101,7 +101,6 @@ function keyPressed() {
 
 function openSerialPort() {
   // console.log(inputSerialPort.value());
-  inputSerialPort.value('');
   portName = inputSerialPort.value();
   serial = new p5.SerialPort(); // make a new instance of the serialport library
   serial.on('list', printList); // set a callback function for the serialport list event
@@ -112,6 +111,7 @@ function openSerialPort() {
   serial.on('close', portClose); // callback for the port closing
   serial.list(); // list the serial ports
   serial.open(portName); // open a serial port
+  inputSerialPort.value('');
 }
 
 function newPulse(data) {
