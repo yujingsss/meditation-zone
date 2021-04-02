@@ -26,6 +26,7 @@ let pointSize = 500;
 let cnv;
 
 let c1, c2;
+let alpha = 0;
 
 function setup() {
   // createCanvas(600, 600);
@@ -95,7 +96,7 @@ function keyPressed() {
     openSerialPort();
   }
   if (key === 's' || key === 'S') {
-    save(cnv, 'interactive-pulse.jpg');
+    save(cnv, 'meditation.jpg');
   }
 }
 
@@ -160,13 +161,20 @@ function otherMouse(data) {
 
 function draw() {
   // background(0,0,0, 8);
+  background(0,alpha);
+  if (alpha >= 8){
+    setGradient(c1,c2);
+    alpha = 0;
+  }
+  // setGradient(c1, c2);
+
   fill(255);
   noStroke();
   ellipse(xPos, yPos, 5, 5);
   xPos++;
   if (xPos >= width) {
     //background(0);
-    // setGradient(c1, c2);
+    setGradient(c1, c2);
     xPos = 0;
   }
 
@@ -221,7 +229,7 @@ function serverConnected() {
 }
 
 function portOpen() {
-  console.log('the serial port opened.')
+  console.log('the serial port opened.');
 }
 
 function serialEvent() {
@@ -232,7 +240,9 @@ function serialEvent() {
     const pulseSignal = sensors[0];
     yPos = map(pulseSignal, 0, 1023, height, 0);
     w = map(pulseSignal, 400, 800, circleR, 0);
-
+    const photoResistorData = sensors[1];
+    // console.log(photoResistorData);
+    alpha = map(photoResistorData, 100 ,250, 8,0);
     // console.log("sending:" + pulseSignal);
     var sensorData = {
       clientR: r,

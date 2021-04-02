@@ -3,8 +3,7 @@
 
 <head>
   <meta charset="UTF-8">
-  <title>readSerial</title>
-  <script src="p5.min.js"></script>
+  <title>Peaceful Meditation</title>
   <link rel="stylesheet" href="../med3/style.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/mediaelement/2.22.0/jquery.js"></script>
@@ -16,10 +15,8 @@
   <link rel="stylesheet" href="style.css">
   <link rel="preconnect" href="https://fonts.gstatic.com">
   <link href="https://fonts.googleapis.com/css2?family=Goldman&family=Press+Start+2P&display=swap" rel="stylesheet">
-  <script src="p5.min.js"></script>
-  <script src="p5.serialport.js" type="text/javascript"></script>
-
-  <script src="p5.serialport.js" type="text/javascript"></script>
+  <script src="../libraries/p5.js"></script>
+  <script src="../libraries/p5.serialport.js" type="text/javascript"></script>
 
 
 
@@ -37,7 +34,7 @@
 
 <body>
   <a style="cursor:crosshair; color: white;" href="../index.html">BACK</a>
-  <iframe id="sketch" src="https://editor.p5js.org/wangq604/embed/3ydAzlaEc"></iframe>
+  <!-- <iframe id="sketch" src="https://editor.p5js.org/wangq604/embed/3ydAzlaEc"></iframe> -->
   <div id='holder'>
     <div id='quote'></div>
     <center>
@@ -50,21 +47,14 @@
         </audio>
       </div>
     </center>
-
   </div>
 
-
-
-
-
-
+  <script src="sketch.js"></script>
+  
   <script>
     $('audio').mediaelementplayer({
       features: ['playpause']
     });
-
-
-
     $(document).ready(function () {
       var arr = ["Become aware of the warmth and tingling of every cell.....", "Feel the energy that is in the extended environment, in every part of nature and in every living thing.....", "Bring all those energies together and feel them as one.....", "Visualize all of that energy shining brightly, as the sun.....", "Feel it starting to travel down into your body from the top of your head, slowly going down into your face and neck, traveling down into the shoulders, all the way down into the arms, down to the fingers.....", "Feel the healing energy and light going down into your chest, all the way down to your hips.....Feel it continue traveling down your legs all the way down to your toes.....", "Your whole body is now filled with divine healing light and energy.....Allow that healing energy to completely fill any physical area that needs healing energy.....Feel it warming, healing and expanding through the area......", "Allow the healing light to bring peace and healing to any emotional issues or traumas.....Bring your awareness to any intentions or desires that you may have.....", "Hold the thoughts of those intentions or desires as you allow the healing energy to bring your deepest desires to life and your intentions into reality.....Feel your connection to divine energy and light, and know that all is ONE.", "Stay with this deep, relaxing, peaceful feeling of bliss."];
       var index = 0;
@@ -74,6 +64,7 @@
       });
     });
   </script>
+
 </body>
 
 </html>

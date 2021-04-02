@@ -1,106 +1,168 @@
-let serial;
-let latestData;
-var t;
+let a = 1;
+let ad = 1;
+let portName;
+let inputSerialPort, button;
+let cnv;
+let sphereR, sphereG, sphereB;
+let rotateNum;
+let acceleration;
 
 function setup() {
+  cnv = createCanvas(windowWidth, windowHeight - 200, WEBGL);
 
+  inputSerialPort = createInput('');
+  inputSerialPort.position(width/2 - 170, 75);
+  inputSerialPort.size(300);
+  inputSerialPort.value('/dev/tty.usbmodem14601');
+  button = createButton('start');
+  button.size(40);
+  button.position(inputSerialPort.x + inputSerialPort.width, 75);
 
+  button.mousePressed(openSerialPort);
+
+  sphereR = 220;
+  sphereG = 180;
+  sphereB = 245;
+  rotateNum = 15000;
+  acceleration = 0;
+}
+
+function keyPressed() {
+  if (keyCode === ENTER) {
+    openSerialPort();
+  }
+  if (key === 's' || key === 'S') {
+    save(cnv, 'meditation.jpg');
+  }
+}
+
+function openSerialPort() {
+  // console.log(inputSerialPort.value());
+  portName = inputSerialPort.value();
   serial = new p5.SerialPort();
+  serial.on('list', printList); 
+  serial.on('connected', serverConnected); 
+  serial.on('open', portOpen); 
+  serial.on('data', serialEvent);
+  serial.on('error', serialError); 
+  serial.on('close', portClose); 
+  serial.list(); 
+  serial.open(portName); 
+  inputSerialPort.value('');
+}
 
-  serial.list();
-  serial.open('/dev/tty.usbmodem14101');
+function draw() {
+  background(255, 255, 255, 0.5);
+  fill(255);
+  noStroke();
+  // a = a + ad;
+  // if (a > 25){
+  //   ad *= -1;
+  // }
+  // if (a < 1){
+  //   ad *= -1;
+  // }
+  
+  //large sphere color
+  // fill(220, 180, 245);
+  fill(sphereR, sphereG, sphereB);
+  //rotate
+  rotateY(millis()/rotateNum);
+  rotateNum -= acceleration;
+  if (acceleration == 100) {
+    rotateNum -= acceleration;
+    if (rotateNum <= 0) {
+      acceleration = 0;
+    }
+  } 
+  if (acceleration == 0) {
+    rotateNum += 100;
+    if (rotateNum >= 15000){
+      acceleration = 0;
+    }
+  }
+  rotateX(130);
+  sphere(70 + a);
+  fill(200, 45, 100, 90);
+  torus(125, 4, 24, 16);
+  
+  fill(190, 190, 255);
+  translate(200, 0, 0);
+  sphere(5);
+  
+  fill(200, 220, 250);
+  translate(-200, -200, 25);
+  sphere(5);
+  
+  fill(250, 200, 250);
+  translate(-200, 200, -50);
+  sphere(5); 
+  
+  fill(225, 200, 255);
+  translate(200, 200, 100);
+  sphere(5);
+  
+  fill(240, 210, 250);
+  translate(100, -50, -150);
+  sphere(5);
+  
+  fill(200, 220, 250);
+  translate(-200, 0, 50);
+  sphere(5);
+  
+  fill(225, 210, 245);
+  translate(0, -300, -100);
+  sphere(5);
+  
+  fill(220, 200, 255);
+  translate(300, 0, 200);
+  sphere(5);
+}
 
-  serial.on('connected', serverConnected);
-
-  serial.on('list', gotList);
-
-  serial.on('data', gotData);
-
-  serial.on('error', gotError);
-
-  serial.on('open', gotOpen);
-
-  serial.on('close', gotClose);
-
-
-  pg = createGraphics(displayWidth, displayHeight);
-  pg.hide();
-  stroke(0, 15);
-  noFill();
-  t = 0;
-
+// get the list of ports:
+function printList(portList) {
+  // portList is an array of serial port names
+  for (var i = 0; i < portList.length; i++) {
+    // Display the list the console:
+    console.log(i + " " + portList[i]);
+  }
 }
 
 function serverConnected() {
-  print("Connected to Server");
+  console.log('connected to server.');
 }
 
-function gotList(thelist) {
-  print("List of Serial Ports:");
-
-  for (let i = 0; i < thelist.length; i++) {
-    print(i + " " + thelist[i]);
-  }
+function portOpen() {
+  console.log('the serial port opened.')
 }
 
-function gotOpen() {
-  print("Serial Port is Open");
-}
-
-function gotClose() {
-  print("Serial Port is Closed");
-  latestData = "Serial Port is Closed";
-}
-
-function gotError(theerror) {
-  print(theerror);
-}
-
-function gotData() {
-  let currentString = serial.readLine();
-  trim(currentString);
-  if (!currentString) return;
-  console.log(currentString);
-  latestData = currentString;
-}
-
-
-
-function draw() {
-  background(255, 255, 255);
-  fill(0, 0, 0);
-  text(latestData, 10, 10);
-  // Polling method
-
-  if (serial.available() > 0) {
-    let data = serial.read();
-    pg.background(200, 0, 255, 0);
-    pg.beginShape();
-    pg.noFill();
-    let r = map(mouseX, 0, 900, 200, 106);
-    let g = random(50, 200);
-    let b = random(100, 250);
-    let a = map(mouseX, 0, 255, 32, 50);
-    strokeWeight(1);
-    pg.stroke(r, g, b, a - 4);
-    for (var i = 0; i < 200; i++) {
-      var ang = map(i, 0, data, 0, TWO_PI);
-      var rad = 200 * noise(i * map(0, 0.01, 0.0002, 0.0001, 0.04), t * 0.009);
-
-      var x = rad * cos(ang);
-      var y = rad * sin(ang);
-      pg.curveVertex(x * 10, y + height / 2);
-    }
-    pg.endShape(CLOSE);
-
-    t += 0.5;
-    image(pg, 0, 0);
-
-    var sparkle = {
-      locationX: random(width),
-      locationY: random(height),
-      size: random(1, 6)
+function serialEvent() {
+  const inString = serial.readStringUntil('\r\n');
+  if (inString.length > 0) {
+    // console.log(inString);
+    const sensors = split(inString, ','); // split the string on the commas
+    const pulseSignal = sensors[0];
+    a = map(pulseSignal, 400, 800, 0, 26);
+    const photoResistorData = sensors[1];
+    // console.log(photoResistorData);
+    if (photoResistorData < 200) {
+      acceleration = 100;
+    } else {
+      acceleration = 0;
     }
   }
+}
 
+function serialError(err) {
+  console.log('Something went wrong with the serial port. ' + err);
+}
+
+function portClose() {
+  console.log('The serial port closed.');
+}
+
+function windowResized() {
+  resizeCanvas(windowWidth, windowHeight);
+  inputSerialPort.position(width/2 - 170, 75);
+  button.position(inputSerialPort.x + inputSerialPort.width, 75);
 }
