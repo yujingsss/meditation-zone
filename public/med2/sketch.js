@@ -1,26 +1,19 @@
 let serial;
 let latestData;
-// let portName = '/dev/tty.usbmodem14101';
-let portName = '/dev/tty.usbmodem14601';
-
+let portName = '/dev/tty.usbmodem14101';
 let diameter; // not clear on the variable name, here
 const count = 6
 let radius;
 
 let circles = []
 
-let inputSerialPort, button;
-let cnv;
 
 function setup() {
-  cnv = createCanvas(windowWidth, windowHeight);
+ createCanvas(windowWidth, windowHeight);
   // pixelDensity(0.03);
   c1 = color(150, 60, 250);
-  c2 = color(10, 20, 255);
+  c2 = color(10,20,255);
   setGradient(c1, c2);
-
-  let back = select('#back');
-  back.position(0, 0);
 
   diameter = width / count;
   radius = diameter / 2
@@ -41,105 +34,86 @@ function setup() {
     }
   }
 
-  inputSerialPort = createInput('');
-  inputSerialPort.position(width / 2 - 170, 75);
-  inputSerialPort.size(300);
-  inputSerialPort.value('/dev/tty.usbmodem14601');
-  button = createButton('start');
-  button.size(40);
-  button.position(inputSerialPort.x + inputSerialPort.width, 75);
+ serial = new p5.SerialPort();
 
-  button.mousePressed(openSerialPort);
-}
+ serial.list();
 
-function keyPressed() {
-  if (keyCode === ENTER) {
-    openSerialPort();
-  }
-  if (key === 's' || key === 'S') {
-    save(cnv, 'meditation.jpg');
-  }
-}
 
-function openSerialPort() {
-  // console.log(inputSerialPort.value());
-  portName = inputSerialPort.value();
-  serial = new p5.SerialPort();
-  serial.on('list', printList);
-  serial.on('connected', serverConnected);
-  serial.on('open', portOpen);
-  serial.on('data', serialEvent);
-  serial.on('error', serialError);
-  serial.on('close', portClose);
-  serial.list();
-  serial.open(portName);
-  inputSerialPort.value('');
-}
+ serial.on('connected', serverConnected);
 
-// get the list of ports:
-function printList(portList) {
-  // portList is an array of serial port names
-  for (var i = 0; i < portList.length; i++) {
-    // Display the list the console:
-    console.log(i + " " + portList[i]);
-  }
+ serial.on('list', gotList);
+
+ serial.on('data', gotData);
+
+ serial.on('error', gotError);
+
+ serial.on('open', gotOpen);
+
+ serial.on('close', gotClose);
+
+ serial.open(portName);
+  
 }
 
 function serverConnected() {
-  console.log('connected to server.');
+ print("Connected to Server");
 }
 
-function portOpen() {
-  console.log('the serial port opened.')
+function gotList(thelist) {
+ print("List of Serial Ports:");
+
+ for (let i = 0; i < thelist.length; i++) {
+  print(i + " " + thelist[i]);
+ }
 }
 
-function portClose() {
-  console.log("Serial Port is Closed");
-  // latestData = "Serial Port is Closed";
+function gotOpen() {
+ print("Serial Port is Open");
 }
 
-function serialError(err) {
-  console.log('Something went wrong with the serial port. ' + err);
+function gotClose(){
+ print("Serial Port is Closed");
+ latestData = "Serial Port is Closed";
 }
 
-function serialEvent() {
-  // let currentString = serial.readLine();
-  // trim(currentString);
-  // if (!currentString) return;
-  // console.log(currentString);
-  // latestData = currentString;
-  const inString = serial.readStringUntil('\r\n');
-  if (inString.length > 0) {
-    // console.log(inString);
-    const sensors = split(inString, ','); // split the string on the commas
-    const pulseSignal = sensors[0];
-    latestData = pulseSignal;
-    console.log(latestData);
-    // const photoResistorData = sensors[1];
-  }
+function gotError(theerror) {
+ print(theerror);
 }
 
-function windowResized() {
-  resizeCanvas(windowWidth, windowHeight);
-  inputSerialPort.position(width / 2 - 170, 75);
-  button.position(inputSerialPort.x + inputSerialPort.width, 75);
+function gotData() {
+ let currentString = serial.readLine();
+  trim(currentString);
+ if (!currentString) return;
+ console.log(currentString);
+ latestData = currentString;
 }
 
 function draw() {
-  //background(255,255,10);
-  fill(0, 0, 0);
-  text(latestData, 10, 10);
-  // Polling method
-
-  if (serial.available() > 0) {
-    let data = serial.read();
-    // ellipse(50,50,data,data);
-    circles.forEach(circle => circle())
-  }
-  else {
+ //background(255,255,10);
+ fill(0,0,0);
+ text(latestData, 10, 10);
+ // Polling method
+ 
+ if (serial.available() > 0) {
+  let data = serial.read();
+  // ellipse(50,50,data,data);
+   circles.forEach(circle => circle())
+ }
+  else{
     // ellipse(50,50,50,50);
+  
   }
-
+ 
+}
+function setGradient(c1, c2) {
+  // noprotect
+  noFill();
+  for (var y = 0; y < height; y++) {
+    var inter = map(y, 0, height, 0, 1);
+    var c = lerpColor(c1, c2, inter);
+    stroke(c);
+    line(0, y, width, y);
+  }
 }
 
 const hueGetter = (offset = 0, inc = 0.01) => {
@@ -147,7 +121,7 @@ const hueGetter = (offset = 0, inc = 0.01) => {
   let t = inc
   return () => {
     pc += t
-    return Math.floor(noise(pc + (offset * 100)) * 360)
+    return Math.floor(noise(pc + (offset * 100)) * 360 )
   }
 }
 
@@ -156,7 +130,7 @@ const makeCircle = ({
   x,
   y
 }) => {
-  const getHue = hueGetter(x + y)
+  const getHue = hueGetter(x+y)
   return () => drawGradient({
     x,
     y,
@@ -174,18 +148,7 @@ function drawGradient({
   let hue = getHue()
   for (let r = radius; r > 0; --r) {
     fill(hue, 90, 90);
-    ellipse(x, y, r, r, serial.read());
+    ellipse(x, y, r,r,serial.read() );
     hue = (hue + 1) % 360;
-  }
-}
-
-function setGradient(c1, c2) {
-  // noprotect
-  noFill();
-  for (var y = 0; y < height; y++) {
-    var inter = map(y, 0, height, 0, 1);
-    var c = lerpColor(c1, c2, inter);
-    stroke(c);
-    line(0, y, width, y);
   }
 }
