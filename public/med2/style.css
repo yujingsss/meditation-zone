@@ -9,6 +9,7 @@ html, body {
   font-family: "RadioGrotesk";
   margin: 0;
   padding: 0;
+  background-color: darkviolet !important;
 }
 canvas {
   display: block;
