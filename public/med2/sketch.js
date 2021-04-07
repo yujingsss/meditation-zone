@@ -5,8 +5,8 @@ let diameter; // not clear on the variable name, here
 const count = 6
 let radius;
 
-let circles = []
-
+let circles = [];
+let ellipseDetail;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
@@ -100,8 +100,9 @@ function gotData() {
   let currentString = serial.readLine();
   trim(currentString);
   if (!currentString) return;
-  console.log(currentString);
+  // console.log(currentString);
   latestData = currentString;
+  ellipseDetail = split(latestData, ',');
 }
 
 function draw() {
@@ -111,7 +112,7 @@ function draw() {
   // Polling method
 
   if (serial.available() > 0) {
-    let data = serial.read();
+    // let data = serial.read();
     // ellipse(50,50,data,data);
     circles.forEach(circle => circle())
   } else {
@@ -137,7 +138,7 @@ const hueGetter = (offset = 0, inc = 0.01) => {
   let t = inc
   return () => {
     pc += t
-    return Math.floor(noise(pc + (offset * 100)) * 360)
+    return Math.floor(noise(pc + (offset * 100)) * 360 * map(ellipseDetail[0],400,800,1,2))
   }
 }
 
@@ -164,7 +165,8 @@ function drawGradient({
   let hue = getHue()
   for (let r = radius; r > 0; --r) {
     fill(hue, 90, 90);
-    ellipse(x, y, r, r, serial.read());
+    // ellipse(x, y, r, r, serial.read());
+    ellipse(x, y, r, r, map(ellipseDetail[0], 400, 800, 0, 25));
     hue = (hue + 1) % 360;
   }
 }
